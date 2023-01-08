@@ -13,6 +13,19 @@ public class Sc_MainCamera : MonoBehaviour
         West
     }
 
+    private static Sc_MainCamera sc_instance;
+
+    public static Sc_MainCamera Instance
+    {
+        get
+        {
+            if (sc_instance == null)
+            {
+                sc_instance = FindObjectOfType<Sc_MainCamera>();
+            }
+            return sc_instance;
+        }
+    }
 
     [SerializeField]
     private Transform trsf_cameraFollow;

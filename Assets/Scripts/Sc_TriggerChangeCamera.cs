@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class Sc_TriggerChangeCamera : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Sc_MainCamera.CameraDirection direction;
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (!other.CompareTag("Player")) return;
+        Sc_MainCamera.Instance.SetCameraDirection(direction);
     }
 }
