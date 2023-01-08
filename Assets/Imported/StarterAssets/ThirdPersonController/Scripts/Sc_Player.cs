@@ -29,6 +29,7 @@ public class Sc_Player : MonoBehaviour
     public float F_JOINRANGE = 2f;
 
     public List<Sc_RabbitData> list_rabbits = new List<Sc_RabbitData>();
+    public List<Sc_RabbitData> list_rabbitsSelected = new List<Sc_RabbitData>();
     [SerializeField]
     private Transform trsf_recallSprite;
     [SerializeField]
@@ -60,7 +61,7 @@ public class Sc_Player : MonoBehaviour
             }
 
         }
-        if (Keyboard.current.eKey.wasPressedThisFrame && f_recallDelay <= 0.0f)
+        if (Keyboard.current.fKey.wasPressedThisFrame && f_recallDelay <= 0.0f)
         {
             f_recallDelay = F_MAXRECALLDELAY;
             StartCoroutine(RoutineExpandRecallSprite());
@@ -96,7 +97,7 @@ public class Sc_Player : MonoBehaviour
     public void MoveOrder(Vector3 position)
     {
         bool oneObey = false;
-        foreach (Sc_RabbitData rabbit in list_rabbits)
+        foreach (Sc_RabbitData rabbit in list_rabbitsSelected)
         {
             if (rabbit.b_selected)
             {

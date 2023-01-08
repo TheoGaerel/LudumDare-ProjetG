@@ -96,6 +96,7 @@ public class Sc_RabbitData : Interactable
     public void OrderToMove(Vector3 position)
     {
         SetSelected(false);
+        Sc_Player.Instance.list_rabbitsSelected.Remove(this);
         SetState(RabbitState.MovingTo);
         controller.MoveTo(position);
     }
@@ -121,6 +122,9 @@ public class Sc_RabbitData : Interactable
 
         if (b_selected) outline.color = 0;
         else if (b_hover) outline.color = 1;
+
+        if(b_selected) Sc_Player.Instance.list_rabbitsSelected.Add(this);
+        else Sc_Player.Instance.list_rabbitsSelected.Remove(this);
     }
 
     public void SetState(RabbitState state)

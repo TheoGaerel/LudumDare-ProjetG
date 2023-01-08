@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class Sc_CameraRaycast : MonoBehaviour
 {
+    [SerializeField]
     private Interactable interactableHovered;
 
     void Update()
