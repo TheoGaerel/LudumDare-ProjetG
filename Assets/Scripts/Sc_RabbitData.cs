@@ -35,6 +35,7 @@ public class Sc_RabbitData : Interactable
         Lost,
         Following,
         Waiting,
+        WaitingToInteract,
         MovingTo,
         Exausted
     }
@@ -44,8 +45,8 @@ public class Sc_RabbitData : Interactable
 
     public RabbitState state = RabbitState.Lost;//{ get; private set; }
     [SerializeField]
-    private Sc_RabbitWorldUI sc_rabbitWorldUI = default;
-
+    private Sc_WorldUI sc_rabbitWorldUI = default;
+    public Interactable targetInteractable { get; private set; }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -60,6 +61,12 @@ public class Sc_RabbitData : Interactable
         if (state == RabbitState.Lost)
         {
             WaitForKingNear();
+            outline.eraseRenderer = true;
+            return;
+        }
+        if (state == RabbitState.Exausted)
+        {
+            outline.eraseRenderer = true;
             return;
         }
         if (state == RabbitState.Following)
@@ -77,28 +84,46 @@ public class Sc_RabbitData : Interactable
             SetState(RabbitState.Following);
             Sc_Player.Instance.OnAddRabbit(this);
         }
-        else if (state == RabbitState.Waiting || state == RabbitState.MovingTo)
+        else if (state == RabbitState.Waiting || state == RabbitState.MovingTo || state == RabbitState.WaitingToInteract)
         {
             SetState(RabbitState.Following);
+            targetInteractable = null;
         }
     }
 
     private void WaitForKingNear()
     {
         //Debug.Log(Vector3.Distance(this.transform.position, Sc_Player.Instance.transform.position));
-        if (Vector3.Distance(this.transform.position, Sc_Player.Instance.transform.position) < Sc_Player.Instance.F_JOINRANGE)
+        if (Vector3.Distance(this.transform.position, Sc_Player.Instance.transform.position) < Sc_Player.Instance.F_INTERACT_RANGE)
         {
-            sc_rabbitWorldUI.ShowCanJoinPlayer();
+            sc_rabbitWorldUI.ShowEKey();
         }
-        else sc_rabbitWorldUI.HideCanJointPlayer();
+        else sc_rabbitWorldUI.HideEKey();
     }
 
+    /// <summary>
+    /// Move to position and unselect
+    /// </summary>
+    /// <param name="position"></param>
     public void OrderToMove(Vector3 position)
     {
+        targetInteractable = null;
         SetSelected(false);
         Sc_Player.Instance.list_rabbitsSelected.Remove(this);
         SetState(RabbitState.MovingTo);
         controller.MoveTo(position);
+    }
+    /// <summary>
+    /// Move to position and unselect
+    /// </summary>
+    /// <param name="position"></param>
+    public void OrderToInteract(Interactable interactable)
+    {
+        targetInteractable = interactable;
+        SetSelected(false);
+        Sc_Player.Instance.list_rabbitsSelected.Remove(this);
+        SetState(RabbitState.MovingTo);
+        controller.MoveTo(interactable.transform.position);
     }
 
     public override void OnClick()
@@ -123,7 +148,7 @@ public class Sc_RabbitData : Interactable
         if (b_selected) outline.color = 0;
         else if (b_hover) outline.color = 1;
 
-        if(b_selected) Sc_Player.Instance.list_rabbitsSelected.Add(this);
+        if (b_selected) Sc_Player.Instance.list_rabbitsSelected.Add(this);
         else Sc_Player.Instance.list_rabbitsSelected.Remove(this);
     }
 

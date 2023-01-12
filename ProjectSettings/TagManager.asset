@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Rabbit
+  - KingInteractable
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,7 @@ public class Sc_RabbitController : MonoBehaviour
     private Vector3 destination;
     private const float F_MIN_DISTANCE_TOFOLLOW = 0.83f;
     private const float F_MIN_DISTANCE_TOMOVEORDER = 0.6f;
+    private const float F_MIN_DISTANCE_TOINTERACT = 1.5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,11 +35,17 @@ public class Sc_RabbitController : MonoBehaviour
             {
                 StopMovement();
             }
-            //Debug.Log(Vector3.Distance(this.transform.position, Sc_Player.Instance.transform.position));
         }
-        if (rabbit.state == Sc_RabbitData.RabbitState.MovingTo && Vector3.Distance(this.transform.position, destination) < F_MIN_DISTANCE_TOMOVEORDER)
+
+       // if (rabbit.targetInteractable) Debug.Log(Vector3.Distance(this.transform.position, rabbit.targetInteractable.transform.position));
+        if (rabbit.state == Sc_RabbitData.RabbitState.MovingTo && rabbit.targetInteractable && Vector3.Distance(this.transform.position, destination) < F_MIN_DISTANCE_TOINTERACT)
         {
-            rabbit.SetState( Sc_RabbitData.RabbitState.Waiting);
+            rabbit.SetState(Sc_RabbitData.RabbitState.WaitingToInteract);
+            StopMovement();
+        }
+        else if (rabbit.state == Sc_RabbitData.RabbitState.MovingTo && Vector3.Distance(this.transform.position, destination) < F_MIN_DISTANCE_TOMOVEORDER)
+        {
+            rabbit.SetState(Sc_RabbitData.RabbitState.Waiting);
             StopMovement();
         }
     }
@@ -48,7 +55,6 @@ public class Sc_RabbitController : MonoBehaviour
         agent.isStopped = false;
         agent.SetDestination(Sc_Player.Instance.transform.position);
     }
-
 
     public void MoveTo(Vector3 position)
     {
