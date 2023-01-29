@@ -23,6 +23,7 @@ public class Sc_Lever : MonoBehaviour
 
     public void OnInteract()
     {
+        Debug.Log("OnInteract");
         if (!b_canUse) return;
         b_canUse = false;
         StartCoroutine(RoutineRotateLever());
@@ -34,11 +35,11 @@ public class Sc_Lever : MonoBehaviour
 
     private IEnumerator RoutineRotateLever()
     {
-        float angleZ = trsf_rotationPoint.eulerAngles.z;
-        while (trsf_rotationPoint.eulerAngles.z > -40)
+        float angleX = trsf_rotationPoint.eulerAngles.x;
+        while (trsf_rotationPoint.eulerAngles.x < 40)
         {
-            angleZ -= Time.deltaTime * 100f;
-            trsf_rotationPoint.eulerAngles = new Vector3(trsf_rotationPoint.eulerAngles.x, trsf_rotationPoint.eulerAngles.y, angleZ);
+            angleX += Time.deltaTime * 100f;
+            trsf_rotationPoint.eulerAngles = new Vector3(angleX, trsf_rotationPoint.eulerAngles.y, trsf_rotationPoint.eulerAngles.z);
             yield return null;
         }
     }
