@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Interactable : MonoBehaviour
+public abstract class Clickable : MonoBehaviour
 {
     protected Outline outline;
     public bool b_selected { get; protected set; } = false;
@@ -28,7 +28,7 @@ public abstract class Interactable : MonoBehaviour
 }
 
 
-public class Sc_RabbitData : Interactable
+public class Sc_RabbitData : Clickable
 {
     public enum RabbitState
     {
@@ -46,7 +46,7 @@ public class Sc_RabbitData : Interactable
     public RabbitState state = RabbitState.Lost;//{ get; private set; }
     [SerializeField]
     private Sc_WorldUI sc_rabbitWorldUI = default;
-    public Interactable targetInteractable { get; private set; }
+    public Clickable targetInteractable { get; private set; }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -117,7 +117,7 @@ public class Sc_RabbitData : Interactable
     /// Move to position and unselect
     /// </summary>
     /// <param name="position"></param>
-    public void OrderToInteract(Interactable interactable)
+    public void OrderToInteract(Clickable interactable)
     {
         targetInteractable = interactable;
         SetSelected(false);

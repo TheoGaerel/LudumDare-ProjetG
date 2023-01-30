@@ -10,7 +10,7 @@ public class Sc_Lever : MonoBehaviour
     [SerializeField]
     private Transform trsf_rotationPoint;
     [SerializeField]
-    private GameObject linkedObject;
+    private Interactable linkedObject;
 
     private void Update()
     {
@@ -27,9 +27,9 @@ public class Sc_Lever : MonoBehaviour
         if (!b_canUse) return;
         b_canUse = false;
         StartCoroutine(RoutineRotateLever());
-        if (linkedObject)
+        if (linkedObject != null)
         {
-
+            linkedObject.OnInteract();
         }
     }
 

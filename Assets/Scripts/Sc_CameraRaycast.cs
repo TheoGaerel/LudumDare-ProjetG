@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class Sc_CameraRaycast : MonoBehaviour
 {
     [SerializeField]
-    private Interactable interactableHovered;
+    private Clickable clickableHovered;
 
     void Update()
     {
@@ -15,12 +15,14 @@ public class Sc_CameraRaycast : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 500, 1 << 3))
         {
-            if (interactableHovered != null && interactableHovered.gameObject != hit.transform.gameObject)
+            if (clickableHovered != null && clickableHovered.gameObject != hit.transform.gameObject)
             {
-                interactableHovered.SetHover(false);
+                clickableHovered.SetHover(false);
             }
-            interactableHovered = hit.transform.GetComponent<Interactable>();
-            interactableHovered.SetHover(true);
+            if(hit.transform.TryGetComponent(out Clickable clickable))
+            {
+                clickable.SetHover(true);
+            }
 
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
@@ -29,11 +31,11 @@ public class Sc_CameraRaycast : MonoBehaviour
         }
         else
         {
-            if (interactableHovered != null)
+            if (clickableHovered != null)
             {
-                interactableHovered.SetHover(false);
+                clickableHovered.SetHover(false);
             }
-            interactableHovered = null;
+            clickableHovered = null;
         }
 
         if (Mouse.current.rightButton.wasPressedThisFrame)
@@ -44,8 +46,8 @@ public class Sc_CameraRaycast : MonoBehaviour
 
     private void ProcessLeftClick()
     {
-        if (interactableHovered == null) return;
-        interactableHovered.OnClick();
+        if (clickableHovered == null) return;
+        clickableHovered.OnClick();
     }
 
     private void ProcessRightClick()

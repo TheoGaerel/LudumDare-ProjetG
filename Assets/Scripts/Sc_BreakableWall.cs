@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_BreakableWall : Interactable
+public class Sc_BreakableWall : Clickable
 {
     [SerializeField]
     [Range(0, 20)]
